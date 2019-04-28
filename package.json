@@ -1,0 +1,32 @@
+{
+  "name": "md2pdf",
+  "version": "1.0.0",
+  "description": "Convert Markdown documents to PDF",
+  "scripts": {
+    "build:doc-1": "npx minicat doc/preface.md doc/toc.md doc/main.md doc/appendix.md > work/all.md",
+    "build:doc-2": "npx doctoc --notitle --maxlevel 3 work/all.md",
+    "build:doc-3": "node scripts/mdit.js work/all.md work/all_md.html",
+    "build:doc-4": "node scripts/ejs.js doc/template.html work/all.html",
+    "build:doc-5": "npx html-inline work/all.html -b doc -o dist/all.html",
+    "build:doc-6": "AHFCmd -d dist/all.html -p @PDF -pdfver 1.5 -base \" \" -x 4 -pgbar -o dist/all.pdf",
+    "build": "npm run build:doc-1 && npm run build:doc-2 && npm run build:doc-3 && npm run build:doc-4 && npm run build:doc-5 && npm run build:doc-6"
+  },
+  "keywords": [
+    "Markdown",
+    "PDF"
+  ],
+  "author": "2SC1815J",
+  "license": "MIT",
+  "devDependencies": {
+    "anchor-markdown-header": "^0.5.7",
+    "doctoc": "^1.4.0",
+    "ejs": "^2.6.1",
+    "eslint": "^5.16.0",
+    "html-inline": "^1.2.0",
+    "htmltidy2": "^0.3.0",
+    "markdown-it": "^8.4.2",
+    "markdown-it-implicit-figures": "^0.9.0",
+    "markdown-it-named-headers": "0.0.4",
+    "minicat": "^1.0.0"
+  }
+}

@@ -1,0 +1,204 @@
+@media screen {
+  body {
+    box-sizing: border-box;
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 30px 45px;
+  }
+  .markdown-body {
+    margin-bottom: 1em;
+  }
+  .FrontCover {
+    margin-bottom: 60px;
+  }
+  .Footnote::before {
+    content: "（";
+  }
+  .Footnote::after {
+    content: "）";
+  }
+}
+
+@media print {
+  body {
+    box-sizing: border-box;
+  }
+
+  /* github-markdown-cssのカスタマイズ */
+  .markdown-body {
+    font-family: "Source Han Serif JP", "MS PMincho", serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Source Han Sans JP", "Hiragino Kaku Gothic Pro", "MS PGothic";
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Source Han Sans JP", "Hiragino Kaku Gothic Pro", "MS PGothic";
+  }
+  .bg-colored {
+    background-color: #f6f8fa !important;
+  }
+  .bg-white {
+    background-color: #ffffff !important;
+  }
+  table {
+    margin-left: auto;
+    margin-right: auto;
+    display: table !important;
+    margin-bottom: 1em !important;
+  }
+  table.page-break-inside-avoid {
+    page-break-inside: avoid;
+  }
+  figure {
+    margin-bottom: 1em;
+    text-align: center;
+    page-break-inside: avoid;
+  }
+  caption,
+  figcaption {
+    font-family: "Source Han Sans JP", source-sans-pro, source-han-sans, sans-serif;
+  }
+  pre {
+    white-space: pre-wrap !important;
+  }
+  code {
+    white-space: pre-wrap !important;
+  }
+
+  /* 表紙 */
+  .FrontCover {
+    font-family: "Source Han Sans JP", source-sans-pro, source-han-sans, sans-serif;
+  }
+  /* 文書タイトル */
+  .FrontCover h1 {
+    margin-top: 55mm;
+    margin-bottom: 140mm;
+    font-weight: 900;
+    font-size: 28pt;
+    text-align: center;
+    page-break-after: avoid;
+  }
+  /* 宛先 */
+  .Attn {
+    font-weight: 600;
+    font-size: 18pt;
+    page-break-after: avoid;
+  }
+  /* 著者 */
+  .Author {
+    margin-bottom: 4mm;
+    text-align: center;
+    font-size: 16pt;
+    line-height: 1em;
+  }
+  /* 日付 */
+  .Published {
+    margin-bottom: 4mm;
+    text-align: center;
+    font-size: 16pt;
+    line-height: 1em;
+  }
+  
+  /* はじめに */
+  article:first-of-type {
+    page-break-before: always;
+    page: Preface;
+  }
+  
+  /* 目次 */
+  .TOC a::after {
+    content: leader(dotted) " " target-counter(attr(href), page);
+  }
+  .TOC {
+    page: TOC;
+  }
+
+  /* 本文 */
+  article {
+    counter-reset: page 1;
+  }
+  article h1:nth-child(n+2) {
+    page-break-before: always;
+  }
+
+  /* 脚注 */
+  .Footnote {
+    text-align: justify;
+    float: footnote;
+    text-indent: 0;
+    font-size: 10pt;
+    line-height: 1.2;
+    font-weight: normal;
+  }
+  ::footnote-call {
+    content: counter(footnote, decimal) ")";
+    font-size: 10pt;
+    font-weight: normal;
+    vertical-align: super;
+  }
+  ::footnote-marker {
+    content: counter(footnote, decimal) ")";
+    font-weight: normal;
+    font-size: 1em;
+    vertical-align: baseline;
+  }
+
+  /* 裏表紙 */
+  .BackCover {
+    page: BackCover;
+    font-family: "Source Han Sans JP", source-sans-pro, source-han-sans, sans-serif;
+  }
+  .Colophon {
+    text-align: justify;
+    float: bottom page;
+    text-indent: 0;
+    font-size: 10pt;
+    line-height: 1.2;
+    font-weight: normal;
+    border-top: .5pt solid black;
+    padding-top: 0.5em;
+  }
+
+  /* ブックマーク */
+  .markdown-body h1 {
+    bookmark-level: 1;
+  }
+  .markdown-body h2 {
+    bookmark-level: 2;
+  }
+  .markdown-body h3 {
+    bookmark-level: 3;
+  }
+
+  @page {
+    size: A4;
+    @bottom-center {
+      content: counter(page);
+    }
+    @footnote {
+      float: page bottom;
+      border-top: .5pt solid black;
+      border-length: 30% 0;
+      margin-top: 0.4em;
+      padding-top: 0.3em;
+      padding-left: 15pt;
+    }
+  }
+  @page :first {
+    @bottom-center {
+      content: none;
+    }
+  }
+  @page Preface {
+    @bottom-center {
+      content: counter(page, lower-roman);
+    }
+  }
+  @page TOC {
+    @bottom-center {
+      content: none;
+    }
+  }
+  @page BackCover {
+    @bottom-center {
+      content: none;
+    }
+  }
+}
