@@ -51,9 +51,7 @@ VS CodeでMarkdown原稿を執筆する場合、VS Codeの拡張機能「[Markdo
 
 ### 複雑な表の記述
 
-Markdownでは表現力が十分でない部分（セルが結合された表など）は、Markdown中にHTMLで直接記述します。
-
-AH Formatter V6.6 MR4では、結合されたセルの背景色が正しく設定されないことがありましたが、AH Formatter V6.6 MR5で修正されました（表1）。<span class="Footnote">AH Formatter V6.6 MR4までの場合、明示的にクラス指定を行うことで対処します。</span>
+Markdownでは表現力が十分でない部分（セルが結合された表など）は、表1のように、Markdown中にHTMLで直接記述しています（もちろん、生成されたPDF上では、HTMLではなく表として描画されているはずです）。
 
 <table class="page-break-inside-avoid">
 <caption>表1</caption>
@@ -76,6 +74,8 @@ AH Formatter V6.6 MR4では、結合されたセルの背景色が正しく設�
   <td></td>
 </tr>
 </table>
+
+なお、AH Formatter V6.6 MR4では、結合されたセルの背景色が正しく設定されないことがありました。この問題はAH Formatter V6.6 MR5で修正されています。<span class="Footnote">AH Formatter V6.6 MR4までの場合、明示的にクラス指定を行うことで対処します。</span>
 
 ### PDFのビルド
 
