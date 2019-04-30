@@ -43,20 +43,6 @@ npm install
 
 ![VS Codeのターミナル（右下）](fig001.png)
 
-### PDFのビルド
-
-ターミナルから次のコマンドを実行することで、docフォルダ内のMarkdown原稿からHTMLとPDFが生成され、distフォルダに出力されます。<span class="Footnote">VS Codeを利用している場合は、VS Codeの`npm.enableScriptExplorer`設定を有効にすることで、コマンドを入力しなくてもマウスクリックでビルドを実行できるようになります。</span>
-
-```
-npm run build
-```
-
-このビルドプロセスは、package.jsonファイルのscriptsプロパティに記載された、`build:doc-1`から`build:doc-6`のステップに従って実行されます。
-
-PDFビルドの前段階としてのMarkdown原稿執筆から、PDFビルドの各ステップまで、順を追って処理内容を見ていきましょう。
-
-## Markdown原稿の執筆
-
 ### Markdown Preview Github Stylingの導入
 
 VS CodeでMarkdown原稿を執筆する場合、VS Codeの拡張機能「[Markdown Preview Github Styling](https://marketplace.visualstudio.com/itemdetails?itemName=bierner.markdown-preview-github-styles)」<span class="Footnote">https://marketplace.visualstudio.com/itemdetails?itemName=bierner.markdown-preview-github-styles</span>をインストールすると、MarkdownがGitHub風のスタイリングでプレビュー表示されるようになり、変換結果をイメージしやすくなります。
@@ -90,6 +76,16 @@ AH Formatter V6.6 MR4では、結合されたセルの背景色が正しく設�
   <td></td>
 </tr>
 </table>
+
+### PDFのビルド
+
+ターミナルから次のコマンドを実行することで、docフォルダ内のMarkdown原稿からHTMLとPDFが生成され、distフォルダに出力されます。<span class="Footnote">VS Codeを利用している場合は、VS Codeの`npm.enableScriptExplorer`設定を有効にすることで、コマンドを入力しなくてもマウスクリックでビルドを実行できるようになります。</span>
+
+```
+npm run build
+```
+
+このビルドプロセスは、package.jsonファイルのscriptsプロパティに記載された、`build:doc-1`から`build:doc-6`のステップに従って実行されます。以降では、この各ステップに沿って、Markdown原稿をPDFへと変換するまでの処理内容を見ていきましょう。
 
 ## Markdown目次の生成
 
