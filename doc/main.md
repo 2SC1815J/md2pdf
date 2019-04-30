@@ -87,7 +87,7 @@ npm run build
 
 このビルドプロセスは、package.jsonファイルのscriptsプロパティに記載された、`build:doc-1`から`build:doc-6`のステップに従って実行されます。以降では、この各ステップに沿って、Markdown原稿をPDFへと変換するまでの処理内容を見ていきましょう。
 
-## Markdown目次の生成
+## Markdown原稿から目次を生成する
 
 ### `build:doc-1` Markdownファイルの連結
 
@@ -123,7 +123,7 @@ Markdownの見出し要素を日本語で記述しており、目次部分のhre
 
 このステップによって、部分的なHTMLファイル（work/all_md.html）が生成されます。
 
-### `build:doc-4` Markdown外部の内容を付与
+### `build:doc-4` Markdown原稿に含まれない内容を付与
 
 markdown-itが生成するHTMLには、&lt;html&gt;や&lt;head&gt;、&lt;body&gt;、CSSファイルへのリンクなどは含まれていません。これらを記述したテンプレートHTMLファイル（doc/template.html）を別途用意し、markdown-itによって生成されたHTMLがその中に含まれるようにします。今回は表紙の内容もここに記述しました。
 
