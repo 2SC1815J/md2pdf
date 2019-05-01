@@ -90,7 +90,7 @@ npm run build
 
 このビルドプロセスは、package.jsonファイルのscriptsプロパティに記載された、`build:doc-1`から`build:doc-6`のステップに従って実行されます。以降では、この各ステップに沿って、Markdown原稿をPDFへと変換するまでの処理内容を見ていきましょう。
 
-## Markdown原稿から目次を生成する
+## Markdown原稿から目次を生成
 
 ### `build:doc-1` Markdownファイルの連結
 
