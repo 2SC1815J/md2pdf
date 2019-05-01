@@ -1,46 +1,47 @@
-# Markdown-PDF 変換
+# MarkdownからCSS組版によりPDF文書を生成する
 
-Markdown原稿から、CSS組版によって表紙や目次、ノンブル等の体裁を備えたPDFにビルドするフローを紹介します。
+本稿では、Markdown形式の原稿からCSS組版により、表紙や目次を備えたPDFの文書をビルドするフローを紹介します。
+MarkdownをPDFに変換するフローはいくつか考えられますが、本稿で紹介するフローではAH CSS Formatterを利用することでノンブルなどの体裁を備えたPDFを生成します。
 
-## 動作環境
+## 変換の方針
+
+AH CSS FormatterによるCSS組版のために、まずはMarkdownの原稿をHTMLへと変換します。具体的には下記のような前処理が必要です。
+
+* Markdownの見出しから目次を生成する
+* 複数のMarkdownのファイルを統合し、組版に必要なヘッダ情報などを含むHTMLへと変換する
+* 画像などをHTMLファイル中にインライン化して埋め込む
+* 組版のためのCSSファイルを用意する
+
+MarkdownやHTMLに対するこれらの操作では、主にウェブ向けに開発されているJavaScript製の便利なツールがNode.jsパッケージとして利用できます。そこで今回は、AH CSS FormatterによるCSS組版を含めた処理全体を、Node.jsのパッケージ管理ツールであるnpmにより実行できるようにしました。
+
+以降では、npmのビルドプロセスを起動してMarkdown原稿からPDFへのビルドを試す手順を、この文書そのものを例に紹介します。その後、npmのビルドプロセスの各手順について、簡単に内容を説明していきます。
+
+## 実際にMarkdownからPDFのビルドを試す
+
+この文書の作成に用いたソースファイル一式「[md2pdf](https://github.com/2SC1815J/md2pdf)」<span class="Footnote">https://github.com/2SC1815J/md2pdf</span>をダウンロードして、Markdown原稿からPDFへのビルドを試すことができます。
+
+### 動作環境
 
 ここで紹介するフローは、以下の環境で動作します。
 
 - Node.js 10+
 - AH CSS Formatter V6.6 MR5+
 
-任意で、Visual Studio Code (VS Code)を利用すると、Markdown編集、プレビュー、PDFへのビルドなどを一つのウィンドウで行えるようになって便利です。
-
-## md2pdf
-
-この文書の作成に用いたソースファイル一式「[md2pdf](https://github.com/2SC1815J/md2pdf)」<span class="Footnote">https://github.com/2SC1815J/md2pdf</span>をダウンロードして、Markdown原稿からPDFへのビルドを試すことができます。
+また、必須ではありませんが、執筆作業のための環境としてVisual Studio Code（VS Code）があると便利でしょう。以降では、VS CodeでMarkdown原稿の編集やプレビューを設定する方法や、PDFへのビルドなどを一つのウィンドウでできるようにする方法も説明します。
 
 ### セットアップ
 
-ダウンロードしたソースファイル一式を適当な場所に解凍します。
- 
-VS Codeを用いる場合、VS Codeの「ファイル」メニューから「フォルダーを開く」を選択し、解凍したフォルダを開いてください。続いて、「ターミナル」メニューから「新しいターミナル」を選択します。VS Codeを用いない場合は、ターミナル（Windowsであればコマンドプロンプトなど）を開き、解凍したフォルダに移動してください。
+ソースファイル一式をダウンロードしたら、適当な場所に解凍してください。
 
-次に、ターミナルから以下のコマンドを実行してください。MarkdownからPDFへビルドするプロセスに必要なNode.jsパッケージがインストールされます。
+次に、VS Codeを用いる場合には、VS Codeの「ファイル」メニューから「フォルダーを開く」を選択し、解凍したフォルダを開いてください。続いて、「ターミナル」メニューから「新しいターミナル」を選択します。VS Codeを用いない場合は、ターミナル（Windowsであればコマンドプロンプトなど）を開き、解凍したフォルダに移動してください。
+
+準備ができたら、ターミナルから以下のコマンドを実行してください。MarkdownからPDFへビルドするプロセスに必要なNode.jsパッケージがインストールされます。
+
 ```
 npm install
 ```
 
 ![VS Codeのターミナル（右下）](fig001.png)
-
-### PDFのビルド
-
-ターミナルから次のコマンドを実行することで、docフォルダ内のMarkdown原稿からHTMLとPDFが生成され、distフォルダに出力されます。<span class="Footnote">VS Codeを利用している場合は、VS Codeの`npm.enableScriptExplorer`設定を有効にすることで、コマンドを入力しなくてもマウスクリックでビルドを実行できるようになります。</span>
-
-```
-npm run build
-```
-
-このビルドプロセスは、package.jsonファイルのscriptsプロパティに記載された、`build:doc-1`から`build:doc-6`のステップに従って実行されます。
-
-PDFビルドの前段階としてのMarkdown原稿執筆から、PDFビルドの各ステップまで、順を追って処理内容を見ていきましょう。
-
-## Markdown原稿の執筆
 
 ### Markdown Preview Github Stylingの導入
 
@@ -50,9 +51,7 @@ VS CodeでMarkdown原稿を執筆する場合、VS Codeの拡張機能「[Markdo
 
 ### 複雑な表の記述
 
-Markdownでは表現力が十分でない部分（セルが結合された表など）は、Markdown中にHTMLで直接記述します。
-
-AH Formatter V6.6 MR4では、結合されたセルの背景色が正しく設定されないことがありましたが、AH Formatter V6.6 MR5で修正されました（表1）。<span class="Footnote">AH Formatter V6.6 MR4までの場合、明示的にクラス指定を行うことで対処します。</span>
+Markdownでは表現力が十分でない部分（セルが結合された表など）は、表1のように、Markdown中にHTMLで直接記述しています（もちろん、生成されたPDF上では、HTMLではなく表として描画されているはずです）。
 
 <table class="page-break-inside-avoid">
 <caption>表1</caption>
@@ -76,7 +75,19 @@ AH Formatter V6.6 MR4では、結合されたセルの背景色が正しく設�
 </tr>
 </table>
 
-## Markdown目次の生成
+なお、AH Formatter V6.6 MR4では、結合されたセルの背景色が正しく設定されないことがありました。この問題はAH Formatter V6.6 MR5で修正されています。<span class="Footnote">AH Formatter V6.6 MR4までの場合、明示的にクラス指定を行うことで対処します。</span>
+
+### PDFのビルド
+
+ターミナルから次のコマンドを実行することで、docフォルダ内のMarkdown原稿からHTMLとPDFが生成され、distフォルダに出力されます。<span class="Footnote">VS Codeを利用している場合は、VS Codeの`npm.enableScriptExplorer`設定を有効にすることで、コマンドを入力しなくてもマウスクリックでビルドを実行できるようになります。</span>
+
+```
+npm run build
+```
+
+このビルドプロセスは、package.jsonファイルのscriptsプロパティに記載された、`build:doc-1`から`build:doc-6`のステップに従って実行されます。以降では、この各ステップに沿って、Markdown原稿をPDFへと変換するまでの処理内容を見ていきましょう。
+
+## Markdown原稿から目次を生成する
 
 ### `build:doc-1` Markdownファイルの連結
 
@@ -112,7 +123,7 @@ Markdownの見出し要素を日本語で記述しており、目次部分のhre
 
 このステップによって、部分的なHTMLファイル（work/all_md.html）が生成されます。
 
-### `build:doc-4` Markdown外部の内容を付与
+### `build:doc-4` Markdown原稿に含まれない内容を付与
 
 markdown-itが生成するHTMLには、&lt;html&gt;や&lt;head&gt;、&lt;body&gt;、CSSファイルへのリンクなどは含まれていません。これらを記述したテンプレートHTMLファイル（doc/template.html）を別途用意し、markdown-itによって生成されたHTMLがその中に含まれるようにします。今回は表紙の内容もここに記述しました。
 
