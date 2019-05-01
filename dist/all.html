@@ -1203,22 +1203,32 @@
     </ul>
     <p>上記の要件を全て満たすPDFを得るために筆者が用いたフローを紹介します。（上記の要件の一部が不要であれば、また違ったフローがあり得るでしょう。）</p>
     <p>ここで取り上げる内容は、筆者の環境で手間をかけずに実現するために用いたフローであって、ベストプラクティスではなく、汎用性に欠ける点もありますが、より良い実現方法が共有されていく叩き台になれば幸いです。</p>
+    <p>本稿の公開にあたり、鹿野桂一郎さんにレビューのご協力をいただきました。ありがとうございました。</p>
   </article>
   <article class="markdown-body">
     <div class="TOC">
       <h3>目次</h3>
       <ul>
         <li>
-          <a href="#markdown-pdf-%E5%A4%89%E6%8F%9B">Markdown-PDF 変換</a>
+          <a href="#markdown%E3%81%8B%E3%82%89css%E7%B5%84%E7%89%88%E3%81%AB%E3%82%88%E3%82%8Apdf%E6%96%87%E6%9B%B8%E3%82%92%E7%94%9F%E6%88%90%E3%81%99%E3%82%8B">MarkdownからCSS組版によりPDF文書を生成する</a>
           <ul>
             <li>
-              <a href="#%E5%8B%95%E4%BD%9C%E7%92%B0%E5%A2%83">動作環境</a>
+              <a href="#%E5%A4%89%E6%8F%9B%E3%81%AE%E6%96%B9%E9%87%9D">変換の方針</a>
             </li>
             <li>
-              <a href="#md2pdf">md2pdf</a>
+              <a href="#%E5%AE%9F%E9%9A%9B%E3%81%ABmarkdown%E3%81%8B%E3%82%89pdf%E3%81%AE%E3%83%93%E3%83%AB%E3%83%89%E3%82%92%E8%A9%A6%E3%81%99">実際にMarkdownからPDFのビルドを試す</a>
               <ul>
                 <li>
+                  <a href="#%E5%8B%95%E4%BD%9C%E7%92%B0%E5%A2%83">動作環境</a>
+                </li>
+                <li>
                   <a href="#%E3%82%BB%E3%83%83%E3%83%88%E3%82%A2%E3%83%83%E3%83%97">セットアップ</a>
+                </li>
+                <li>
+                  <a href="#markdown-preview-github-styling%E3%81%AE%E5%B0%8E%E5%85%A5">Markdown Preview Github Stylingの導入</a>
+                </li>
+                <li>
+                  <a href="#%E8%A4%87%E9%9B%91%E3%81%AA%E8%A1%A8%E3%81%AE%E8%A8%98%E8%BF%B0">複雑な表の記述</a>
                 </li>
                 <li>
                   <a href="#pdf%E3%81%AE%E3%83%93%E3%83%AB%E3%83%89">PDFのビルド</a>
@@ -1226,18 +1236,7 @@
               </ul>
             </li>
             <li>
-              <a href="#markdown%E5%8E%9F%E7%A8%BF%E3%81%AE%E5%9F%B7%E7%AD%86">Markdown原稿の執筆</a>
-              <ul>
-                <li>
-                  <a href="#markdown-preview-github-styling%E3%81%AE%E5%B0%8E%E5%85%A5">Markdown Preview Github Stylingの導入</a>
-                </li>
-                <li>
-                  <a href="#%E8%A4%87%E9%9B%91%E3%81%AA%E8%A1%A8%E3%81%AE%E8%A8%98%E8%BF%B0">複雑な表の記述</a>
-                </li>
-              </ul>
-            </li>
-            <li>
-              <a href="#markdown%E7%9B%AE%E6%AC%A1%E3%81%AE%E7%94%9F%E6%88%90">Markdown目次の生成</a>
+              <a href="#markdown%E5%8E%9F%E7%A8%BF%E3%81%8B%E3%82%89%E7%9B%AE%E6%AC%A1%E3%82%92%E7%94%9F%E6%88%90">Markdown原稿から目次を生成</a>
               <ul>
                 <li>
                   <a href="#builddoc-1-markdown%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%81%AE%E9%80%A3%E7%B5%90"><code>build:doc-1</code> Markdownファイルの連結</a>
@@ -1254,7 +1253,7 @@
                   <a href="#builddoc-3-markdown-it%E3%81%AB%E3%82%88%E3%82%8B%E5%A4%89%E6%8F%9B"><code>build:doc-3</code> markdown-itによる変換</a>
                 </li>
                 <li>
-                  <a href="#builddoc-4-markdown%E5%A4%96%E9%83%A8%E3%81%AE%E5%86%85%E5%AE%B9%E3%82%92%E4%BB%98%E4%B8%8E"><code>build:doc-4</code> Markdown外部の内容を付与</a>
+                  <a href="#builddoc-4-markdown%E5%8E%9F%E7%A8%BF%E3%81%AB%E5%90%AB%E3%81%BE%E3%82%8C%E3%81%AA%E3%81%84%E5%86%85%E5%AE%B9%E3%82%92%E4%BB%98%E4%B8%8E"><code>build:doc-4</code> Markdown原稿に含まれない内容を付与</a>
                 </li>
                 <li>
                   <a href="#builddoc-5-html-inline%E3%81%AB%E3%82%88%E3%82%8B%E3%82%A4%E3%83%B3%E3%83%A9%E3%82%A4%E3%83%B3%E5%8C%96"><code>build:doc-5</code> html-inlineによるインライン化</a>
@@ -1292,21 +1291,36 @@
     </div>
   </article>
   <article class="markdown-body">
-    <h1 id="markdown-pdf-変換">Markdown-PDF 変換</h1>
-    <p>Markdown原稿から、CSS組版によって表紙や目次、ノンブル等の体裁を備えたPDFにビルドするフローを紹介します。</p>
-    <h2 id="動作環境">動作環境</h2>
+    <h1 id="markdownからcss組版によりpdf文書を生成する">MarkdownからCSS組版によりPDF文書を生成する</h1>
+    <p>本稿では、Markdown形式の原稿から、表紙や目次、ノンブルなどを備えたPDFの文書に変換するフローを紹介します。</p>
+    <p>MarkdownをPDFに変換するフローはいくつか考えられますが、本稿で紹介するフローでは、AH CSS Formatterを利用したCSS組版により以下の点を実現しています。</p>
+    <ul>
+      <li>コマンドライン操作のみで完結するので繰り返しビルドが容易</li>
+      <li>TeXの知識がなくてもデザインを調整できる</li>
+    </ul>
+    <h2 id="変換の方針">変換の方針</h2>
+    <p>AH CSS FormatterによるCSS組版のために、まずはMarkdownの原稿をHTMLへと変換します。具体的には下記のような前処理が必要です。</p>
+    <ul>
+      <li>Markdownの見出しから目次を生成する</li>
+      <li>複数のMarkdownのファイルを統合し、組版に必要なヘッダ情報などを含むHTMLへと変換する</li>
+      <li>画像などをHTMLファイル中にインライン化して埋め込む</li>
+      <li>組版のためのCSSファイルを用意する</li>
+    </ul>
+    <p>MarkdownやHTMLに対するこれらの操作では、主にウェブ向けに開発されているJavaScript製の便利なツールがNode.jsパッケージとして利用できます。そこで今回は、AH CSS FormatterによるCSS組版を含めた処理全体を、Node.jsのパッケージ管理ツールであるnpmにより実行できるようにしました。</p>
+    <p>以降では、npmのビルドプロセスを起動してMarkdown原稿からPDFへのビルドを試す手順を、この文書そのものを例に紹介します。その後、npmのビルドプロセスの各手順について、簡単に内容を説明していきます。</p>
+    <h2 id="実際にmarkdownからpdfのビルドを試す">実際にMarkdownからPDFのビルドを試す</h2>
+    <p>この文書の作成に用いたソースファイル一式「<a href="https://github.com/2SC1815J/md2pdf">md2pdf</a>」<span class="Footnote">https://github.com/2SC1815J/md2pdf</span>をダウンロードして、Markdown原稿からPDFへのビルドを試すことができます。</p>
+    <h3 id="動作環境">動作環境</h3>
     <p>ここで紹介するフローは、以下の環境で動作します。</p>
     <ul>
       <li>Node.js 10+</li>
       <li>AH CSS Formatter V6.6 MR5+</li>
     </ul>
-    <p>任意で、Visual Studio Code (VS Code)を利用すると、Markdown編集、プレビュー、PDFへのビルドなどを一つのウィンドウで行えるようになって便利です。</p>
-    <h2 id="md2pdf">md2pdf</h2>
-    <p>この文書の作成に用いたソースファイル一式「<a href="https://github.com/2SC1815J/md2pdf">md2pdf</a>」<span class="Footnote">https://github.com/2SC1815J/md2pdf</span>をダウンロードして、Markdown原稿からPDFへのビルドを試すことができます。</p>
+    <p>また、必須ではありませんが、執筆作業のための環境としてVisual Studio Code（VS Code）があると便利でしょう。以降では、VS CodeでMarkdown原稿の編集やプレビューを設定する方法や、PDFへのビルドなどを一つのウィンドウでできるようにする方法も説明します。</p>
     <h3 id="セットアップ">セットアップ</h3>
-    <p>ダウンロードしたソースファイル一式を適当な場所に解凍します。</p>
-    <p>VS Codeを用いる場合、VS Codeの「ファイル」メニューから「フォルダーを開く」を選択し、解凍したフォルダを開いてください。続いて、「ターミナル」メニューから「新しいターミナル」を選択します。VS Codeを用いない場合は、ターミナル（Windowsであればコマンドプロンプトなど）を開き、解凍したフォルダに移動してください。</p>
-    <p>次に、ターミナルから以下のコマンドを実行してください。MarkdownからPDFへビルドするプロセスに必要なNode.jsパッケージがインストールされます。</p>
+    <p>ソースファイル一式をダウンロードしたら、適当な場所に解凍してください。</p>
+    <p>次に、VS Codeを用いる場合には、VS Codeの「ファイル」メニューから「フォルダーを開く」を選択し、解凍したフォルダを開いてください。続いて、「ターミナル」メニューから「新しいターミナル」を選択します。VS Codeを用いない場合は、ターミナル（Windowsであればコマンドプロンプトなど）を開き、解凍したフォルダに移動してください。</p>
+    <p>準備ができたら、ターミナルから以下のコマンドを実行してください。MarkdownからPDFへビルドするプロセスに必要なNode.jsパッケージがインストールされます。</p>
     <pre><code>npm install
 </code></pre>
     <figure>
@@ -1315,13 +1329,6 @@
         VS Codeのターミナル（右下）
       </figcaption>
     </figure>
-    <h3 id="pdfのビルド">PDFのビルド</h3>
-    <p>ターミナルから次のコマンドを実行することで、docフォルダ内のMarkdown原稿からHTMLとPDFが生成され、distフォルダに出力されます。<span class="Footnote">VS Codeを利用している場合は、VS Codeの<code>npm.enableScriptExplorer</code>設定を有効にすることで、コマンドを入力しなくてもマウスクリックでビルドを実行できるようになります。</span></p>
-    <pre><code>npm run build
-</code></pre>
-    <p>このビルドプロセスは、package.jsonファイルのscriptsプロパティに記載された、<code>build:doc-1</code>から<code>build:doc-6</code>のステップに従って実行されます。</p>
-    <p>PDFビルドの前段階としてのMarkdown原稿執筆から、PDFビルドの各ステップまで、順を追って処理内容を見ていきましょう。</p>
-    <h2 id="markdown原稿の執筆">Markdown原稿の執筆</h2>
     <h3 id="markdown-preview-github-stylingの導入">Markdown Preview Github Stylingの導入</h3>
     <p>VS CodeでMarkdown原稿を執筆する場合、VS Codeの拡張機能「<a href="https://marketplace.visualstudio.com/itemdetails?itemName=bierner.markdown-preview-github-styles">Markdown Preview Github Styling</a>」<span class="Footnote">https://marketplace.visualstudio.com/itemdetails?itemName=bierner.markdown-preview-github-styles</span>をインストールすると、MarkdownがGitHub風のスタイリングでプレビュー表示されるようになり、変換結果をイメージしやすくなります。</p>
     <figure>
@@ -1331,8 +1338,7 @@
       </figcaption>
     </figure>
     <h3 id="複雑な表の記述">複雑な表の記述</h3>
-    <p>Markdownでは表現力が十分でない部分（セルが結合された表など）は、Markdown中にHTMLで直接記述します。</p>
-    <p>AH Formatter V6.6 MR4では、結合されたセルの背景色が正しく設定されないことがありましたが、AH Formatter V6.6 MR5で修正されました（表1）。<span class="Footnote">AH Formatter V6.6 MR4までの場合、明示的にクラス指定を行うことで対処します。</span></p>
+    <p>Markdownでは表現力が十分でない部分（セルが結合された表など）は、表1のように、Markdown中にHTMLで直接記述しています（もちろん、生成されたPDF上では、HTMLではなく表として描画されているはずです）。</p>
     <table class="page-break-inside-avoid">
       <caption>
         表1
@@ -1356,7 +1362,13 @@
         <td></td>
       </tr>
     </table>
-    <h2 id="markdown目次の生成">Markdown目次の生成</h2>
+    <p>なお、AH Formatter V6.6 MR4では、結合されたセルの背景色が正しく設定されないことがありました。この問題はAH Formatter V6.6 MR5で修正されています。<span class="Footnote">AH Formatter V6.6 MR4までの場合、明示的にクラス指定を行うことで対処します。</span></p>
+    <h3 id="pdfのビルド">PDFのビルド</h3>
+    <p>ターミナルから次のコマンドを実行することで、docフォルダ内のMarkdown原稿からHTMLとPDFが生成され、distフォルダに出力されます。<span class="Footnote">VS Codeを利用している場合は、VS Codeの<code>npm.enableScriptExplorer</code>設定を有効にすることで、コマンドを入力しなくてもマウスクリックでビルドを実行できるようになります。</span></p>
+    <pre><code>npm run build
+</code></pre>
+    <p>このビルドプロセスは、package.jsonファイルのscriptsプロパティに記載された、<code>build:doc-1</code>から<code>build:doc-6</code>のステップに従って実行されます。以降では、この各ステップに沿って、Markdown原稿をPDFへと変換するまでの処理内容を見ていきましょう。</p>
+    <h2 id="markdown原稿から目次を生成">Markdown原稿から目次を生成</h2>
     <h3 id="builddoc-1-markdownファイルの連結"><code>build:doc-1</code> Markdownファイルの連結</h3>
     <p>目次のひな形（doc/toc.md）を、複数のMarkdown原稿（doc/preface.md, doc/main.md, doc/appendix.md）と合わせて、単一のMarkdownファイルにします。</p>
     <pre><code>npx minicat doc/preface.md doc/toc.md doc/main.md doc/appendix.md &gt; work/all.md
@@ -1374,7 +1386,7 @@
 </code></pre>
     <p>Markdownの見出し要素を日本語で記述しており、目次部分のhrefにURIエンコードされた日本語文字列が設定されている場合、AH Formatter V6.6 MR4では、CSS組版によるページ番号表示（target-counter(attr(href))の処理）が正しく動作しない問題がありましたが、AH Formatter V6.6 MR5で修正されました。<span class="Footnote">AH Formatter V6.6 MR4までの場合、Markdownの見出し要素からアンカーを作成するNode.jsパッケージ「<a href="https://github.com/thlorenz/anchor-markdown-header">anchor-markdown-header</a>」に変更を加えて対処する方法があります。</span></p>
     <p>このステップによって、部分的なHTMLファイル（work/all_md.html）が生成されます。</p>
-    <h3 id="builddoc-4-markdown外部の内容を付与"><code>build:doc-4</code> Markdown外部の内容を付与</h3>
+    <h3 id="builddoc-4-markdown原稿に含まれない内容を付与"><code>build:doc-4</code> Markdown原稿に含まれない内容を付与</h3>
     <p>markdown-itが生成するHTMLには、&lt;html&gt;や&lt;head&gt;、&lt;body&gt;、CSSファイルへのリンクなどは含まれていません。これらを記述したテンプレートHTMLファイル（doc/template.html）を別途用意し、markdown-itによって生成されたHTMLがその中に含まれるようにします。今回は表紙の内容もここに記述しました。</p>
     <pre><code>node scripts/ejs.js doc/template.html work/all.html
 </code></pre>
