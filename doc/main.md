@@ -1,17 +1,17 @@
 # MarkdownからCSS組版によりPDF文書を生成する
 
-本稿では、Markdown形式の原稿から、表紙や目次、ノンブルなどを備えたPDFの文書に変換するフローを紹介します。
+本稿では、Markdown形式の原稿を、表紙や目次、ノンブルなどを備えたPDFの文書へと変換するフローを紹介します。
 
 MarkdownをPDFに変換するフローはいくつか考えられますが、本稿で紹介するフローでは、AH CSS Formatterを利用したCSS組版により以下の点を実現しています。
 - コマンドライン操作のみで完結するので繰り返しビルドが容易
-- TeXの知識がなくてもデザインを調整できる
+- CSS組版なのでTeXの知識がなくてもPDFの見た目を調整できる
 
 ## 変換の方針
 
 AH CSS FormatterによるCSS組版のために、まずはMarkdownの原稿をHTMLへと変換します。具体的には下記のような前処理が必要です。
 
 - Markdownの見出しから目次を生成する
-- 複数のMarkdownのファイルを統合し、組版に必要なヘッダ情報などを含むHTMLへと変換する
+- 複数のMarkdownのファイルを統合し、組版に必要なヘッダ情報などを含む単一のHTMLファイルへと変換する
 - 画像などをHTMLファイル中にインライン化して埋め込む
 - 組版のためのCSSファイルを用意する
 
@@ -88,7 +88,7 @@ Markdownでは表現力が十分でない部分（セルが結合された表な
 npm run build
 ```
 
-このビルドプロセスは、package.jsonファイルのscriptsプロパティに記載された、`build:doc-1`から`build:doc-6`のステップに従って実行されます。以降では、この各ステップに沿って、Markdown原稿をPDFへと変換するまでの処理内容を見ていきましょう。
+このビルドプロセスは、package.jsonファイルのscriptsプロパティに記載された、`build:doc-1`から`build:doc-6`のステップに従って実行されます。以降では、この各ステップに沿って、Markdown原稿をPDFへと変換するまでの処理内容を見ていきます。
 
 ## Markdown原稿から目次を生成
 
@@ -134,7 +134,7 @@ markdown-itが生成するHTMLには、&lt;html&gt;や&lt;head&gt;、&lt;body&gt
 node scripts/ejs.js doc/template.html work/all.html
 ```
 
-AH Formatter V6.6では、HTMLファイルのmetaタグに次の記載を含めることで、このHTMLから変換されたPDFが開かれる際、ページ全体がウィンドウに収まるズーム状態とすることができます。
+AH Formatter V6.6では、HTMLファイルのmetaタグに次の記載を含めることで、このHTMLから変換されたPDFをビューワーで開いたときにページ全体がウィンドウに収まっている状態にズームさせることができます。
 ```
 <meta name="openaction" content="#view=fit">
 ```
