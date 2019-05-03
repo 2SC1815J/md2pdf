@@ -78,11 +78,11 @@ Markdownでは表現力が十分でない部分（セルが結合された表な
 </tr>
 </table>
 
-なお、AH Formatter V6.6 MR4では、結合されたセルの背景色が正しく設定されないことがありました。この問題はAH Formatter V6.6 MR5で修正されています。<span class="Footnote">AH Formatter V6.6 MR4までの場合、明示的にクラス指定を行うことで対処します。</span>
+なお、AH Formatter V6.6 MR4では、結合されたセルの背景色が正しく設定されないことがありました。この問題はAH Formatter V6.6 MR5で修正されています<span class="Footnote">AH Formatter V6.6 MR4までの場合、明示的にクラス指定を行うことで対処します。</span>。
 
 ### PDFのビルド
 
-ターミナルから次のコマンドを実行することで、docフォルダ内のMarkdown原稿からHTMLとPDFが生成され、distフォルダに出力されます。<span class="Footnote">VS Codeを利用している場合は、VS Codeの`npm.enableScriptExplorer`設定を有効にすることで、コマンドを入力しなくてもマウスクリックでビルドを実行できるようになります。</span>
+ターミナルから次のコマンドを実行することで、docフォルダ内のMarkdown原稿からHTMLとPDFが生成され、distフォルダに出力されます<span class="Footnote">VS Codeを利用している場合は、VS Codeの`npm.enableScriptExplorer`設定を有効にすることで、コマンドを入力しなくてもマウスクリックでビルドを実行できるようになります。</span>。
 
 ```
 npm run build
@@ -122,7 +122,7 @@ Node.jsパッケージ「[markdown-it](https://github.com/markdown-it/markdown-i
 node scripts/mdit.js work/all.md work/all_md.html
 ```
 
-Markdownの見出し要素を日本語で記述しており、目次部分のhrefにURIエンコードされた日本語文字列が設定されている場合、AH Formatter V6.6 MR4では、CSS組版によるページ番号表示（target-counter(attr(href))の処理）が正しく動作しない問題がありましたが、AH Formatter V6.6 MR5で修正されました。<span class="Footnote">AH Formatter V6.6 MR4までの場合、Markdownの見出し要素からアンカーを作成するNode.jsパッケージ「[anchor-markdown-header](https://github.com/thlorenz/anchor-markdown-header)」に変更を加えて対処する方法があります。</span>
+Markdownの見出し要素を日本語で記述しており、目次部分のhrefにURIエンコードされた日本語文字列が設定されている場合、AH Formatter V6.6 MR4では、CSS組版によるページ番号表示（target-counter(attr(href))の処理）が正しく動作しない問題がありましたが、AH Formatter V6.6 MR5で修正されました<span class="Footnote">AH Formatter V6.6 MR4までの場合、Markdownの見出し要素からアンカーを作成するNode.jsパッケージ「[anchor-markdown-header](https://github.com/thlorenz/anchor-markdown-header)」に変更を加えて対処する方法があります。</span>。
 
 このステップによって、部分的なHTMLファイル（work/all_md.html）が生成されます。
 
@@ -139,7 +139,7 @@ AH Formatter V6.6では、HTMLファイルのmetaタグに次の記載を含め�
 <meta name="openaction" content="#view=fit">
 ```
 
-また、AH Formatter V6.6 MR5からは、次の記載を含めることで、生成されるPDFの文書情報に含まれる作成日（/CreationDate）と更新日（/ModDate）を指定の値に設定することができます。<span class="Footnote">AH Formatter V6.6 MR4までの場合、「[Coherent PDF Command Line Tools (cpdf)](https://community.coherentpdf.com/)」を利用して設定する方法があります。</span>
+また、AH Formatter V6.6 MR5からは、次の記載を含めることで、生成されるPDFの文書情報に含まれる作成日（/CreationDate）と更新日（/ModDate）を指定の値に設定することができます<span class="Footnote">AH Formatter V6.6 MR4までの場合、「[Coherent PDF Command Line Tools (cpdf)](https://community.coherentpdf.com/)」を利用して設定する方法があります。</span>。
 ```
 <meta name="creationdate" content="20190501T090000+09">
 <meta name="modifydate" content="20190501T090000+09">
@@ -155,7 +155,7 @@ CSS組版用のCSSファイルを調整する場合は、このHTMLファイル�
 
 ### `build:doc-5` html-inlineによるインライン化
 
-Node.jsパッケージ「[html-inline](https://github.com/substack/html-inline)」<span class="Footnote">https://github.com/substack/html-inline</span>を用いて、HTMLファイルから参照されているCSSファイルや画像ファイルをHTMLファイル内にインライン化（埋め込み）します。<span class="Footnote">AH Formatter V6.6 MR5までの場合、生成されるPDFのプロパティ「ベースURL」に生成元HTMLファイルの場所が表示され、同表示を空にするには、HTMLファイルから参照されている外部ファイルをインライン化した上で、PDF出力時にコマンドラインパラメータ指定（-base " "）を行う必要がありました。AH Formatter V6.6 MR6からは、これらの処理は不要となっています。</span>
+Node.jsパッケージ「[html-inline](https://github.com/substack/html-inline)」<span class="Footnote">https://github.com/substack/html-inline</span>を用いて、HTMLファイルから参照されているCSSファイルや画像ファイルをHTMLファイル内にインライン化（埋め込み）します<span class="Footnote">AH Formatter V6.6 MR5までの場合、生成されるPDFのプロパティ「ベースURL」に生成元HTMLファイルの場所が表示され、同表示を空にするには、HTMLファイルから参照されている外部ファイルをインライン化した上で、PDF出力時にコマンドラインパラメータ指定（-base " "）を行う必要がありました。AH Formatter V6.6 MR6からは、これらの処理は不要となっています。</span>。
 
 ```
 npx html-inline work/all.html -b doc -o dist/all.html
