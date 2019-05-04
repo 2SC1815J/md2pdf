@@ -1195,14 +1195,14 @@
       <li>Visual Studio Codeで、ソフトウェア開発に付随する報告書などの作成も行いたい</li>
       <li>文書はMarkdownで執筆し、PDFで提出したい</li>
       <li>コマンドライン操作のみでPDFビルドが完了するようにしたい</li>
-      <li>GitHubでのMarkdown表示のようなスタイリングにしたい</li>
+      <li>GitHubにおけるMarkdown表示のようなスタイリングにしたい</li>
       <li>PDFには表紙や目次、ノンブル（ページ番号）を付けたい</li>
-      <li>目次は、項目タイトルとページ番号、ドキュメント内リンクを自動作成してほしい</li>
+      <li>目次には、項目タイトルとページ番号、ドキュメント内リンクが自動的に生成されてほしい</li>
       <li>ノンブルは、表紙や目次を除いた本文ページのみに振りたい</li>
       <li>PDFには余計なプロパティを含めたくない</li>
     </ul>
     <p>上記の要件を全て満たすPDFを得るために筆者が用いたフローを紹介します。（上記の要件の一部が不要であれば、また違ったフローがあり得るでしょう。）</p>
-    <p>ここで取り上げる内容は、筆者の環境で手間をかけずに実現するために用いたフローであって、ベストプラクティスではなく、汎用性に欠ける点もありますが、より良い実現方法が共有されていく叩き台になれば幸いです。</p>
+    <p>ここで取り上げる内容は、筆者の環境で手間をかけずに実現するために用いたフローであって、ベストプラクティスではありません。汎用性に欠ける点もありますが、より良い実現方法が共有されていく叩き台になれば幸いです。</p>
     <p>本稿の公開にあたり、鹿野桂一郎さんにレビューのご協力をいただきました。ありがとうございました。</p>
   </article>
   <article class="markdown-body">
@@ -1292,17 +1292,17 @@
   </article>
   <article class="markdown-body">
     <h1 id="markdownからcss組版によりpdf文書を生成する">MarkdownからCSS組版によりPDF文書を生成する</h1>
-    <p>本稿では、Markdown形式の原稿から、表紙や目次、ノンブルなどを備えたPDFの文書に変換するフローを紹介します。</p>
+    <p>本稿では、Markdown形式の原稿から、表紙や目次、ノンブルなどを備えたPDFの文書へと変換するフローを紹介します。</p>
     <p>MarkdownをPDFに変換するフローはいくつか考えられますが、本稿で紹介するフローでは、AH CSS Formatterを利用したCSS組版により以下の点を実現しています。</p>
     <ul>
       <li>コマンドライン操作のみで完結するので繰り返しビルドが容易</li>
-      <li>TeXの知識がなくてもデザインを調整できる</li>
+      <li>TeXの知識がなくてもPDFの見た目を調整できる</li>
     </ul>
     <h2 id="変換の方針">変換の方針</h2>
     <p>AH CSS FormatterによるCSS組版のために、まずはMarkdownの原稿をHTMLへと変換します。具体的には下記のような前処理が必要です。</p>
     <ul>
       <li>Markdownの見出しから目次を生成する</li>
-      <li>複数のMarkdownのファイルを統合し、組版に必要なヘッダ情報などを含むHTMLへと変換する</li>
+      <li>複数のMarkdownのファイルを統合し、組版に必要なヘッダ情報などを含む単一のHTMLファイルへと変換する</li>
       <li>画像などをHTMLファイル中にインライン化して埋め込む</li>
       <li>組版のためのCSSファイルを用意する</li>
     </ul>
@@ -1367,7 +1367,7 @@
     <p>ターミナルから次のコマンドを実行することで、docフォルダ内のMarkdown原稿からHTMLとPDFが生成され、distフォルダに出力されます。<span class="Footnote">VS Codeを利用している場合は、VS Codeの<code>npm.enableScriptExplorer</code>設定を有効にすることで、コマンドを入力しなくてもマウスクリックでビルドを実行できるようになります。</span></p>
     <pre><code>npm run build
 </code></pre>
-    <p>このビルドプロセスは、package.jsonファイルのscriptsプロパティに記載された、<code>build:doc-1</code>から<code>build:doc-6</code>のステップに従って実行されます。以降では、この各ステップに沿って、Markdown原稿をPDFへと変換するまでの処理内容を見ていきましょう。</p>
+    <p>このビルドプロセスは、package.jsonファイルのscriptsプロパティに記載された、<code>build:doc-1</code>から<code>build:doc-6</code>のステップに従って実行されます。以降では、この各ステップに沿って、Markdown原稿をPDFへと変換するまでの処理内容を見ていきます。</p>
     <h2 id="markdown原稿から目次を生成">Markdown原稿から目次を生成</h2>
     <h3 id="builddoc-1-markdownファイルの連結"><code>build:doc-1</code> Markdownファイルの連結</h3>
     <p>目次のひな形（doc/toc.md）を、複数のMarkdown原稿（doc/preface.md, doc/main.md, doc/appendix.md）と合わせて、単一のMarkdownファイルにします。</p>
@@ -1390,7 +1390,7 @@
     <p>markdown-itが生成するHTMLには、&lt;html&gt;や&lt;head&gt;、&lt;body&gt;、CSSファイルへのリンクなどは含まれていません。これらを記述したテンプレートHTMLファイル（doc/template.html）を別途用意し、markdown-itによって生成されたHTMLがその中に含まれるようにします。今回は表紙の内容もここに記述しました。</p>
     <pre><code>node scripts/ejs.js doc/template.html work/all.html
 </code></pre>
-    <p>AH Formatter V6.6では、HTMLファイルのmetaタグに次の記載を含めることで、このHTMLから変換されたPDFが開かれる際、ページ全体がウィンドウに収まるズーム状態とすることができます。</p>
+    <p>AH Formatter V6.6では、HTMLファイルのmetaタグに次の記載を含めることで、このHTMLから変換されたPDFをビューワで開いたときにページ全体がウィンドウに収まっている状態にズームさせることができます。</p>
     <pre><code>&lt;meta name="openaction" content="#view=fit"&gt;
 </code></pre>
     <p>また、AH Formatter V6.6 MR5からは、次の記載を含めることで、生成されるPDFの文書情報に含まれる作成日（/CreationDate）と更新日（/ModDate）を指定の値に設定することができます。<span class="Footnote">AH Formatter V6.6 MR4までの場合、「<a href="https://community.coherentpdf.com/">Coherent PDF Command Line Tools (cpdf)</a>」を利用して設定する方法があります。</span></p>
