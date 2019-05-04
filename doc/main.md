@@ -1,10 +1,10 @@
 # MarkdownからCSS組版によりPDF文書を生成する
 
-本稿では、Markdown形式の原稿を、表紙や目次、ノンブルなどを備えたPDFの文書へと変換するフローを紹介します。
+本稿では、Markdown形式の原稿から、表紙や目次、ノンブルなどを備えたPDFの文書へと変換するフローを紹介します。
 
 MarkdownをPDFに変換するフローはいくつか考えられますが、本稿で紹介するフローでは、AH CSS Formatterを利用したCSS組版により以下の点を実現しています。
 - コマンドライン操作のみで完結するので繰り返しビルドが容易
-- CSS組版なのでTeXの知識がなくてもPDFの見た目を調整できる
+- TeXの知識がなくてもPDFの見た目を調整できる
 
 ## 変換の方針
 
@@ -134,7 +134,7 @@ markdown-itが生成するHTMLには、&lt;html&gt;や&lt;head&gt;、&lt;body&gt
 node scripts/ejs.js doc/template.html work/all.html
 ```
 
-AH Formatter V6.6では、HTMLファイルのmetaタグに次の記載を含めることで、このHTMLから変換されたPDFをビューワーで開いたときにページ全体がウィンドウに収まっている状態にズームさせることができます。
+AH Formatter V6.6では、HTMLファイルのmetaタグに次の記載を含めることで、このHTMLから変換されたPDFをビューワで開いたときにページ全体がウィンドウに収まっている状態にズームさせることができます。
 ```
 <meta name="openaction" content="#view=fit">
 ```
