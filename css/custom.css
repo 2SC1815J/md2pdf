@@ -111,7 +111,7 @@
   }
 
   /* 本文 */
-  article {
+  article:lang(ja) {
     counter-reset: page 1;
   }
   article h1:nth-child(n+2) {

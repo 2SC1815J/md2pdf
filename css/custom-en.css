@@ -1,0 +1,71 @@
+@media print {
+
+  /* github-markdown-cssのカスタマイズ */
+  :root, .markdown-body {
+    font-family: "Source Sans Pro", source-sans-pro, sans-serif;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: "Source Sans Pro", source-sans-pro, sans-serif;
+  }
+
+  caption,
+  figcaption {
+    font-family: "Source Sans Pro", source-sans-pro, sans-serif;
+  }
+
+  /* Title page/表紙 */
+  .FrontCover {
+    font-family: "Source Sans Pro", source-code-pro, sans-serif;
+  }
+  /* Back cover/裏表紙 */
+  .BackCover {
+    font-family: "Source Sans Pro", source-sans-pro, sans-serif;
+  }
+
+.markdown-body code,
+.markdown-body pre {
+    font-family: "Source Code Pro", source-ocde-pro, monospace;
+  }
+
+  .TOC {
+    page: Preface;
+  }
+
+  .TOC a::after {
+    content: "\2005" leader(dotted) "\200A" target-counter(attr(href), page);
+  }
+
+  .TOC > ul:first-of-type > li:first-of-type a::after {
+    content: "\2005" leader(dotted) "\200A" target-counter(attr(href), page, lower-roman);
+  }
+
+  .TOC ul {
+    list-style: none;
+  }
+
+  .TOC li > ul {
+      margin-right: -2em;
+  }
+
+  .TOC li {
+    margin-right: 2em;
+    -ah-last-line-end-indent: -2em;
+    text-indent: -1em;
+  }
+
+  /* Preface/はじめに */
+  section.Preface {
+    page-break-before: always;
+    page: Preface;
+  }
+
+  /* 本文 */
+  article:nth-of-type(2) > h1:first-of-type {
+    counter-reset: page 1;
+  }
+
+  /* Footnote/脚注 */
+  .Footnote {
+    text-align: left;
+  }
+}
